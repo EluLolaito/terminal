@@ -32,7 +32,7 @@ jobs:
           set SolutionDir=%CD%\
           set VCPKG_ROOT=%CD%\dep\vcpkg
           mkdir src\packages
-          xcopy /E /I packages src\packages\
+          xcopy /E /I packages\ src\packages\
           for /f "delims=" %%i in ('dir "%ProgramFiles%\Microsoft SDKs\Windows\v10.*" /b /ad /on 2^>nul ^| tail -1') do set "SDKVER=%%i"
           echo Using SDK: %SDKVER%
           msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj /p:Configuration=Release /p:Platform=x64 /p:SolutionDir=%SolutionDir% /p:CppWinRTVerifyKitVersion=false /p:WindowsTargetPlatformVersion=%SDKVER% /p:WindowsSdkVersion=%SDKVER% /p:RestorePackages=true /t:Restore,Build
