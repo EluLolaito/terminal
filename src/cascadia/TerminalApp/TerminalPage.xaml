@@ -13,6 +13,13 @@
       Background="Transparent"
       mc:Ignorable="d">
 
+    <Page.Resources>
+        <ResourceDictionary>
+            <CornerRadius x:Key="OverlayCornerRadius">0</CornerRadius>
+            <CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
+        </ResourceDictionary>
+    </Page.Resources>
+
     <Grid x:Name="Root"
           Background="Transparent">
         <Grid.RowDefinitions>
