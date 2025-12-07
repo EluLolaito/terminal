@@ -45,17 +45,14 @@ jobs:
           xcopy /E /I /Y packages\ src\packages\
           for /f "delims=" %%i in ('dir "%ProgramFiles%\Microsoft SDKs\Windows\v10.*" /b /ad /on 2^>nul ^| tail -1') do set "SDKVER=%%i"
           echo Using SDK: %SDKVER%
-          set WindowsSdkDir=%ProgramFiles%\Microsoft SDKs\Windows\%SDKVER%
-          set WindowsSDKVersion=%SDKVER%
-          set WindowsTargetPlatformVersion=%SDKVER%
           msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj ^
             /p:SolutionDir=%SolutionDir% ^
-            /p:WindowsSdkDir="%WindowsSdkDir%" ^
-            /p:WindowsSDKVersion=%SDKVER% ^
             /p:WindowsTargetPlatformVersion=%SDKVER% ^
+            /p:WindowsSdkVersion=%SDKVER% ^
             /p:Configuration=Release ^
             /p:Platform=x64 ^
-            /t:Restore,Build
+            /t:Restore,Build ^
+            /p:RetargetProjects=true
           
       - name: Upload tabs DLL
         uses: actions/upload-artifact@v4
