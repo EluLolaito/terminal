@@ -1,0 +1,18 @@
+name: Build Windows Terminal
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup MSVC
+      uses: microsoft/setup-msbuild@v2
+    - name: Build
+      shell: cmd
+      run: |
+        tools\devcmds\build.cmd -p x64 -c Release
+    - name: Upload Terminal.exe
+      uses: actions/upload-artifact@v4
+      with:
+        name: Terminal-Release
+        path: out/x64-Release/Terminal.exe
