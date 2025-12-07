@@ -31,7 +31,7 @@ jobs:
         run: |
           set SolutionDir=%CD%\
           set VCPKG_ROOT=%CD%\dep\vcpkg
-          msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj /p:Configuration=Release /p:Platform=x64 /p:SolutionDir=%SolutionDir% /p:CppWinRTVerifyKitVersion=false
+          msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj /p:Configuration=Release /p:Platform=x64 /p:SolutionDir=%SolutionDir% /p:CppWinRTVerifyKitVersion=false /p:WindowsTargetPlatformVersion=%SDKVER% /p:WindowsSdkVersion=%SDKVER%
           
       - name: Upload tabs DLL
         uses: actions/upload-artifact@v4
