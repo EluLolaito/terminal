@@ -29,11 +29,11 @@ jobs:
       - name: Restore packages by nuget
         shell: cmd
         run: |
-          nuget restore dep\nuget\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
-          nuget restore build\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
-          nuget restore tools\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
-          nuget restore .nuget\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
-          nuget restore scratch\ScratchIslandApp\WindowExe\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
+          nuget restore dep\nuget\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages >nul
+          nuget restore build\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages >nul
+          nuget restore tools\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages >nul
+          nuget restore .nuget\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages >nul
+          nuget restore scratch\ScratchIslandApp\WindowExe\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages >nul
 
       - name: Check SDK existence then Build TerminalAppLib
         shell: cmd
@@ -44,12 +44,19 @@ jobs:
           if not defined SDKVER set SDKVER=10.0.26100.0
           echo Using SDK: %SDKVER%
           set "WindowsSdkDir=%ProgramFiles(x86)%\Windows Kits\10\"
+          set "WindowsSDKVersion=%SDKVER%"
+          set "WindowsTargetPlatformVersion=%SDKVER%"
           set SolutionDir=%CD%\
           echo %SolutionDir%
           set VCPKG_ROOT=%CD%\dep\vcpkg
           mkdir src\packages
           xcopy /E /I /Y packages\ src\packages\ >nul
-          msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj /p:SolutionDir=%SolutionDir% /p:WindowsTargetPlatformVersion=%SDKVER% /p:WindowsSdkVersion=%SDKVER% /p:WindowsSdkDir=%WindowsSdkDir% /p:RetargetProjects=true /p:Configuration=Release /p:Platform=x64 /t:Restore,Build
+          msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj ^
+            /p:BuildProjectReferences=false ^
+            /p:RetargetProjects=true ^
+            /p:Configuration=Release ^
+            /p:Platform=x64 ^
+            /t:Restore,Build
           
       - name: Upload tabs DLL
         uses: actions/upload-artifact@v4
