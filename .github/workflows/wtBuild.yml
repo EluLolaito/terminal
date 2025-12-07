@@ -48,16 +48,8 @@ jobs:
           echo %SolutionDir%
           set VCPKG_ROOT=%CD%\dep\vcpkg
           mkdir src\packages
-          xcopy /E /I /Y packages\ src\packages\
-          msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj ^
-            /p:SolutionDir=%SolutionDir% ^
-            /p:WindowsTargetPlatformVersion=%SDKVER% ^
-            /p:WindowsSdkVersion=%SDKVER% ^
-            /p:WindowsSdkDir=%WindowsSdkDir% ^
-            /p:RetargetProjects=true ^
-            /p:Configuration=Release ^
-            /p:Platform=x64 ^
-            /t:Restore,Build
+          xcopy /E /I /Y packages\ src\packages\ >nul
+          msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj /p:SolutionDir=%SolutionDir% /p:WindowsTargetPlatformVersion=%SDKVER% /p:WindowsSdkVersion=%SDKVER% /p:WindowsSdkDir=%WindowsSdkDir% /p:RetargetProjects=true /p:Configuration=Release /p:Platform=x64 /t:Restore,Build
           
       - name: Upload tabs DLL
         uses: actions/upload-artifact@v4
