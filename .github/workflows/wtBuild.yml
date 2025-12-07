@@ -51,12 +51,15 @@ jobs:
           set VCPKG_ROOT=%CD%\dep\vcpkg
           mkdir src\packages
           xcopy /E /I /Y packages\ src\packages\ >nul
+          msbuild src\cascadia\TerminalCore\TerminalCore.vcxproj /p:BuildProjectReferences=false /p:RetargetProjects=true /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
+          msbuild src\cascadia\TerminalControl\TerminalControl.vcxproj /p:BuildProjectReferences=false /p:RetargetProjects=true /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
+          msbuild src\cascadia\SettingsModel\SettingsModel.vcxproj /p:BuildProjectReferences=false /p:RetargetProjects=true /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
           msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj ^
             /p:BuildProjectReferences=false ^
             /p:RetargetProjects=true ^
             /p:Configuration=Release ^
             /p:Platform=x64 ^
-            /t:Restore,Build
+            /t:Build
           
       - name: Upload tabs DLL
         uses: actions/upload-artifact@v4
