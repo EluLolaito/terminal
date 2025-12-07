@@ -30,6 +30,7 @@ jobs:
         shell: cmd
         run: |
           set SolutionDir=%CD%\
+          echo %SolutionDir%
           set VCPKG_ROOT=%CD%\dep\vcpkg
           mkdir src\packages
           xcopy /E /I packages\ src\packages\
