@@ -25,12 +25,18 @@ jobs:
           cd dep\vcpkg
           .\bootstrap-vcpkg.bat
           cd ..\..
-      - name: Restore NuGet then Build
+
+      - name: Restore types.vcxproj NuGet directly
+        shell: cmd
+        run: |
+          set SolutionDir=%CD%\
+          nuget restore src\types\lib\types.vcxproj
+
+      - name: Build TerminalAppLib
         shell: cmd
         run: |
           set SolutionDir=%CD%\
           set VCPKG_ROOT=%CD%\dep\vcpkg
-          nuget restore src\cascadia\TerminalApp\TerminalAppLib.vcxproj
           for /f "delims=" %%i in ('dir "%ProgramFiles%\Microsoft SDKs\Windows\v10.*" /b /ad /on 2^>nul ^| tail -1') do set "SDKVER=%%i"
           echo Using SDK: %SDKVER%
           msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj /p:Configuration=Release /p:Platform=x64 /p:SolutionDir=%SolutionDir% /p:CppWinRTVerifyKitVersion=false /p:WindowsTargetPlatformVersion=%SDKVER% /p:WindowsSdkVersion=%SDKVER%
