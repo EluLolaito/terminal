@@ -10,9 +10,13 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
         
-      - name: Setup vcpkg
+      - name: Setup CMake
         uses: lukka/get-cmake@latest
+
+      - name: Setup Python
         uses: actions/setup-python@v5
+
+      - name: Install vcpkg
         shell: cmd
         run: |
           if not exist dep\vcpkg (
