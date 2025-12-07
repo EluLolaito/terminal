@@ -28,7 +28,12 @@ jobs:
 
       - name: Restore packages by nuget
         shell: cmd
-        run: nuget restore . -ConfigFile NuGet.Config
+        run: |
+          nuget restore dep\nuget\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
+          nuget restore build\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
+          nuget restore tools\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
+          nuget restore .nuget\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
+          nuget restore scratch\ScratchIslandApp\WindowExe\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
 
       - name: Build TerminalAppLib
         shell: cmd
