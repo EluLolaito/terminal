@@ -35,6 +35,15 @@ jobs:
           nuget restore .nuget\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
           nuget restore scratch\ScratchIslandApp\WindowExe\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages
 
+      - name: Check SDK existence
+        shell: cmd
+        run: |
+          dir "%ProgramFiles%\Microsoft SDKs\Windows\v*" /b 2>nul || echo "No v10.* SDKs"
+          dir "%ProgramFiles(x86)%\Windows Kits\10\Include\*" /b /ad 2>nul || echo "No Windows Kits Include"
+          for /f "delims=" %%i in ('dir "%ProgramFiles(x86)%\Windows Kits\10\Include\*" /b /ad /on 2^>nul ^| tail -1') do set "SDKVER=%%i"
+          if not defined SDKVER set SDKVER=10.0.26100.0
+          echo Using SDK: %SDKVER%
+
       - name: Build TerminalAppLib
         shell: cmd
         run: |
@@ -43,8 +52,6 @@ jobs:
           set VCPKG_ROOT=%CD%\dep\vcpkg
           mkdir src\packages
           xcopy /E /I /Y packages\ src\packages\
-          for /f "delims=" %%i in ('dir "%ProgramFiles%\Microsoft SDKs\Windows\v10.*" /b /ad /on 2^>nul ^| tail -1') do set "SDKVER=%%i"
-          echo Using SDK: %SDKVER%
           msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj ^
             /p:SolutionDir=%SolutionDir% ^
             /p:WindowsTargetPlatformVersion=%SDKVER% ^
