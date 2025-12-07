@@ -1,4 +1,4 @@
-name: Build Windows Terminal Tabs
+name: Build Terminal Tabs
 on: [push, pull_request]
 
 jobs:
@@ -11,14 +11,16 @@ jobs:
         uses: microsoft/setup-msbuild@v2
         
       - name: Setup vcpkg
+        uses: lukka/get-cmake@latest
+        uses: actions/setup-python@v5
         shell: cmd
         run: |
-          set VCPKG_ROOT=%CD%\dep\vcpkg
-          if not exist dep\vcpkg\bootstrap-vcpkg.bat (
-            echo vcpkg missing - skipping build
-            exit /b 0
+          if not exist dep\vcpkg (
+            git clone https://github.com/Microsoft/vcpkg.git dep\vcpkg
           )
-          dep\vcpkg\bootstrap-vcpkg.bat
+          cd dep\vcpkg
+          .\bootstrap-vcpkg.bat
+          cd ..\..
           
       - name: Build TerminalAppLib
         shell: cmd
@@ -27,8 +29,8 @@ jobs:
           set VCPKG_ROOT=%CD%\dep\vcpkg
           msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj /p:Configuration=Release /p:Platform=x64 /p:SolutionDir=%SolutionDir% /p:WindowsSdkVersion=10.0.22621.0 /p:CppWinRTVerifyKitVersion=false
           
-      - name: Upload TerminalAppLib.dll
+      - name: Upload tabs DLL
         uses: actions/upload-artifact@v4
         with:
-          name: TerminalAppLib-Release
+          name: TerminalAppLib-SquareTabs
           path: bin\x64\Release\TerminalAppLib.dll
