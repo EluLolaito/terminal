@@ -28,7 +28,7 @@ jobs:
 
       - name: Restore NuGet Packages
         shell: cmd
-        run: nuget restore src\cascadia\TerminalApp\TerminalAppLib.sln
+        run: nuget restore src\cascadia\TerminalApp\TerminalAppLib.vcxproj
 
       - name: Build TerminalAppLib
         shell: cmd
