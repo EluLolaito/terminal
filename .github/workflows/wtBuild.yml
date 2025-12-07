@@ -26,12 +26,6 @@ jobs:
           .\bootstrap-vcpkg.bat
           cd ..\..
 
-      - name: Restore types.vcxproj NuGet directly
-        shell: cmd
-        run: |
-          set SolutionDir=%CD%\
-          nuget restore src\types\lib\types.vcxproj
-
       - name: Build TerminalAppLib
         shell: cmd
         run: |
