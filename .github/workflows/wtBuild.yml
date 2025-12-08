@@ -34,6 +34,7 @@ jobs:
           nuget restore tools\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages >nul
           nuget restore .nuget\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages >nul
           nuget restore scratch\ScratchIslandApp\WindowExe\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages >nul
+          nuget restore OpenConsole.slnx -MSBuildVersion 17
 
       - name: Check SDK existence then Build TerminalAppLib
         shell: cmd
@@ -51,30 +52,8 @@ jobs:
           set VCPKG_ROOT=%CD%\dep\vcpkg
           mkdir src\packages
           xcopy /E /I /Y packages\ src\packages\ >nul
-          msbuild src\cascadia\TerminalConnection\TerminalConnection.vcxproj ^
-            /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
-          msbuild src\cascadia\TerminalCore\lib\terminalcore-lib.vcxproj ^
-            /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
-          msbuild src\cascadia\TerminalSettingsModel\Microsoft.Terminal.Settings.ModelLib.vcxproj ^
-            /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
-          msbuild src\cascadia\TerminalSettingsModel\dll\Microsoft.Terminal.Settings.Model.vcxproj ^
-            /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
-          msbuild src\cascadia\TerminalControl\dll\TerminalControl.vcxproj ^
-            /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
-          msbuild src\cascadia\UIHelpers\UIHelpers.vcxproj ^
-            /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
-          msbuild src\cascadia\UIMarkdown\UIMarkdown.vcxproj ^
-            /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
-          msbuild src\cascadia\TerminalSettingsEditor\Microsoft.Terminal.Settings.Editor.vcxproj ^
-            /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
-          msbuild src\cascadia\TerminalSettingsAppAdapterLib\TerminalSettingsAppAdapterLib.vcxproj ^
-            /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
-          msbuild src\cascadia\TerminalApp\TerminalAppLib.vcxproj ^
-            /p:BuildProjectReferences=true ^
-            /p:RetargetProjects=true ^
-            /p:Configuration=Release ^
-            /p:Platform=x64 ^
-            /t:Build
+          .\tools\razzle.cmd
+          msbuild OpenConsole.slnx /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
           
       - name: Upload tabs DLL
         uses: actions/upload-artifact@v4
