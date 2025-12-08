@@ -53,7 +53,7 @@ jobs:
           mkdir src\packages
           xcopy /E /I /Y packages\ src\packages\ >nul
           .\tools\razzle.cmd
-          msbuild OpenConsole.slnx /p:Configuration=Release /p:Platform=x64 /t:Build /nr:false
+          dotnet build OpenConsole.slnx -c Release -p:Platform=x64
           
       - name: Upload tabs DLL
         uses: actions/upload-artifact@v4
