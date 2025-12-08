@@ -34,7 +34,7 @@ jobs:
           nuget restore tools\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages >nul
           nuget restore .nuget\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages >nul
           nuget restore scratch\ScratchIslandApp\WindowExe\packages.config -ConfigFile NuGet.Config -PackagesDirectory packages >nul
-          nuget restore OpenConsole.slnx -MSBuildVersion 17
+          nuget restore OpenConsole.slnx
 
       - name: Check SDK existence then Build TerminalAppLib
         shell: cmd
